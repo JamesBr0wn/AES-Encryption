@@ -27,12 +27,12 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    aes.cpp
+    algorithm.cpp
 
 HEADERS += \
         mainwindow.h \
-    aes.h \
-    configure.h
+    configure.h \
+    algorithm.h
 
 FORMS += \
         mainwindow.ui

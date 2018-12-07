@@ -1,4 +1,4 @@
-#include "aes.h"
+#include "algorithm.h"
 
 AES::AES(){
 
@@ -74,4 +74,40 @@ void AES::InvRowShift(std::bitset<8> data[16]){
         data[i+12] = data[i+13];
     }
     data[15] = tempChar;
+}
+
+void AES::ColumnMix(std::bitset<8> data[16]){
+    std::bitset<8> temp[4];
+    for(int i = 0; i < 4; i++){
+        // 获取对应列的元素
+        for(int j = 0; j < 4; j++){
+            temp[j] = data[i + j * 4];
+        }
+
+        // 计算乘积矩阵的一列
+        data[i] = GFMul_0x02[temp[0].to_ulong()] ^ GFMul_0x03[temp[1].to_ulong()] ^ temp[2] ^ temp[3];
+        data[i+4] = temp[0] ^ GFMul_0x02[temp[1].to_ulong()] ^ GFMul_0x03[temp[2].to_ulong()] ^ temp[3];
+        data[i+8] = temp[0] ^ temp[1] ^ GFMul_0x02[temp[2].to_ulong()]  ^ GFMul_0x03[temp[2].to_ulong()];
+        data[i+12] = GFMul_0x03[temp[0].to_ulong()] ^ temp[1] ^ temp[2] ^ GFMul_0x02[temp[3].to_ulong()];
+    }
+}
+
+void AES::InvColumnMix(std::bitset<8> data[16]){
+    std::bitset<8> temp[4];
+    for(int i = 0; i < 4; i++){
+        // 获取对应列的元素
+        for(int j = 0; j < 4; j++){
+            temp[j] = data[i + j * 4];
+        }
+
+        // 计算乘积矩阵的一列
+        data[i] = GFMul_0x0e[temp[0].to_ulong()] ^ GFMul_0x0b[temp[1].to_ulong()] ^ GFMul_0x0d[temp[2].to_ulong()] ^ GFMul_0x09[temp[3].to_ulong()];
+        data[i+4] = GFMul_0x09[temp[0].to_ulong()] ^ GFMul_0x0e[temp[1].to_ulong()] ^ GFMul_0x0b[temp[2].to_ulong()] ^ GFMul_0x0d[temp[3].to_ulong()];
+        data[i+8] = GFMul_0x0d[temp[0].to_ulong()] ^ GFMul_0x09[temp[1].to_ulong()] ^ GFMul_0x0e[temp[2].to_ulong()] ^ GFMul_0x0b[temp[3].to_ulong()];
+        data[i+12] = GFMul_0x0b[temp[0].to_ulong()] ^ GFMul_0x0d[temp[1].to_ulong()] ^ GFMul_0x09[temp[2].to_ulong()] ^ GFMul_0x0e[temp[3].to_ulong()];
+    }
+}
+
+void AES::RoundKeyAdd(std::bitset<8> data[16], std::bitset<8> key[16]){
+
 }
