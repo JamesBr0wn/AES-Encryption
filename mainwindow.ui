@@ -6,12 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>600</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>AES Encrypt Demo</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="icon.qrc">
+    <normaloff>:/icon/icon.ico</normaloff>:/icon/icon.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="verticalLayoutWidget">
@@ -19,13 +23,13 @@
      <rect>
       <x>9</x>
       <y>9</y>
-      <width>381</width>
+      <width>581</width>
       <height>31</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="titleLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="title">
        <property name="font">
         <font>
          <family>DejaVu Sans Mono</family>
@@ -45,17 +49,17 @@
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>130</y>
-      <width>381</width>
-      <height>131</height>
+      <x>20</x>
+      <y>140</y>
+      <width>541</width>
+      <height>181</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="mainTextLayout">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="plainTextLayout">
        <item>
-        <widget class="QLabel" name="label_5">
+        <widget class="QLabel" name="plainTextPrompt">
          <property name="text">
           <string>明文</string>
          </property>
@@ -65,35 +69,39 @@
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit"/>
+        <widget class="QTextEdit" name="plainTextEdit"/>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_6"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="clearPlainButton">
          <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton">
-         <property name="text">
-          <string>PushButton</string>
+          <string>清除</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
+      <layout class="QVBoxLayout" name="buttonLayout">
        <item>
-        <widget class="QLabel" name="label_6">
+        <widget class="QPushButton" name="encryptButton">
+         <property name="text">
+          <string>加密&gt;&gt;&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="decryptButton">
+         <property name="text">
+          <string>&lt;&lt;&lt;解密</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="cipherTextLayout">
+       <item>
+        <widget class="QLabel" name="cipherTextPrompt">
          <property name="text">
           <string>密文</string>
          </property>
@@ -103,7 +111,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit_2"/>
+        <widget class="QTextEdit" name="cipherTextEdit"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clearCipherButton">
+         <property name="text">
+          <string>清除</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -112,17 +127,38 @@
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>129</x>
+      <x>69</x>
       <y>50</y>
-      <width>141</width>
+      <width>461</width>
       <height>31</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="patternLayout">
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="modePrompt">
        <property name="text">
-        <string>加密方式</string>
+        <string>工作模式</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="modeBox">
+       <item>
+        <property name="text">
+         <string>ECB</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>CBC</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="typePrompt">
+       <property name="text">
+        <string>加密位数</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -130,22 +166,38 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QComboBox" name="typeBox">
+       <item>
+        <property name="text">
+         <string>128 Bit</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>192 Bit</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>256 Bit</string>
+        </property>
+       </item>
+      </widget>
      </item>
     </layout>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget_4">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>40</x>
       <y>90</y>
-      <width>381</width>
+      <width>521</width>
       <height>31</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <layout class="QHBoxLayout" name="secretKeyLayout">
      <item>
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="secretKeyPrompt">
        <property name="text">
         <string>密钥</string>
        </property>
@@ -155,24 +207,28 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="secretKeyEdit">
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget_5">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>270</y>
-      <width>381</width>
-      <height>21</height>
+      <x>21</x>
+      <y>340</y>
+      <width>561</width>
+      <height>41</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_7">
+    <layout class="QHBoxLayout" name="copyrightLayout">
      <item>
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="copyright">
        <property name="text">
-        <string>©数据科学与计算机学院 计算机科学与技术专业 16337247 吴晨康</string>
+        <string>©数据科学与计算机学院 16337247 吴晨康</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -184,6 +240,8 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="icon.qrc"/>
+ </resources>
  <connections/>
 </ui>
