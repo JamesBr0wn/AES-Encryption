@@ -31,7 +31,7 @@ public:
     std::bitset<32> WordGenerate(std::bitset<8> bytes[4]);
     std::bitset<32> WordRot(std::bitset<32>& word);
     std::bitset<32> WordSub(std::bitset<32>& word);
-//private:
+private:
     int keyLength, roundNum;
     std::bitset<8>* keyPtr;
     std::bitset<32>* expendedKeyPtr;

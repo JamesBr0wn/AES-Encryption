@@ -27,10 +27,11 @@ AES::~AES(){
 }
 
 void AES::SetKey(std::bitset<8>* key){
-    // 设置加密密钥
+    // 设置初始密钥
     for(int i = 0; i < 4 * keyLength; i++){
         keyPtr[i] = key[i];
     }
+    // 设置扩展密钥
     KeyExpend(keyPtr, expendedKeyPtr);
 }
 
@@ -246,7 +247,7 @@ AESWrapper::AESWrapper(EncryptType type, WorkMode mode):aes(type){
 }
 
 void AESWrapper::SetKey(std::string keyStr){
-    // 设置加密密钥
+    // 设置加密密钥参数
     size_t keyLength = 0;
     std::bitset<8>* keyBin;
     switch(type){
@@ -260,6 +261,7 @@ void AESWrapper::SetKey(std::string keyStr){
             keyLength = 32;
             break;
     }
+    // 设置加密密钥，位数不足时使用0-Padding，位数超出时截断
     keyBin = new  std::bitset<8>[keyLength];
     for(size_t i =  0; i < keyLength; i++){
         if(i < keyStr.length()){
@@ -272,26 +274,13 @@ void AESWrapper::SetKey(std::string keyStr){
     delete[] keyBin;
 }
 
-void printData(std::bitset<8> data[16]){
-    for(int i = 0; i < 16; i++){
-        std::cout << std::hex << data[i].to_ulong() << " ";
-    }
-    std::cout << std::endl;
-}
-
-void printKey(std::bitset<32> data[44]){
-    for(int i = 0; i < 44; i++){
-        std::cout << std::hex << data[i].to_ulong() << " ";
-    }
-    std::cout << std::endl;
-}
-
 std::string AESWrapper::Encrypt(std::string dataStr){
     size_t dataLength = (dataStr.length()+15) / 16 * 16;
     std::bitset<8>* dataBin = new std::bitset<8>[dataLength];
     char low, high;
     std::string result;
 
+    // 将字符串形式的明文转换为二进制类型，并进行补齐/截断
     for(size_t i = 0; i < dataLength; i++){
         if(i < dataStr.length()){
             dataBin[i] = static_cast<unsigned char>(dataStr[i]);
@@ -300,11 +289,12 @@ std::string AESWrapper::Encrypt(std::string dataStr){
         }
     }
 
-    if(mode == ECB){
+    // 根据不同的工作模式进行加密
+    if(mode == ECB){    // 电码本模式
         for(size_t i = 0; i < dataLength/16; i++){
             aes.Encrypt(dataBin+i*16);
         }
-    }else{
+    }else{              // 密文反馈模式
         std::bitset<8> temp[16];
         for(size_t i = 0; i < dataLength/16; i++){
             if(i > 0){
@@ -345,6 +335,7 @@ std::string AESWrapper::Decrypt(std::string dataStr){
     int temp;
     std::string result;
 
+    // 将字符串形式的密文转换为二进制类型，并进行补齐/截断
     for(size_t i = 0; i < dataLength; i++){
         if(isdigit(dataStr[2*i])){
             temp = dataStr[2*i] - '0';
@@ -360,11 +351,12 @@ std::string AESWrapper::Decrypt(std::string dataStr){
         dataBin[i] = static_cast<unsigned long>(temp);
     }
 
-    if(mode == ECB){
+    // 根据不同的工作模式进行解密
+    if(mode == ECB){    // 电码本模式
         for(size_t i = 0; i < dataLength/16; i++){
             aes.Decrypt(dataBin+i*16);
         }
-    }else{
+    }else{              // 密文反馈模式
         std::bitset<8> temp[2][16];
         for(size_t i = 0; i < dataLength/16; i++){
             for(size_t j = 0; j < 16; j++){
